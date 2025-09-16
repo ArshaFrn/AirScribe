@@ -85,17 +85,11 @@ def main():
     pinchConfirmFrames = 2
     handLostTolerance = 10
 
-    targetFps = 120
-    frameTime = 1.0 / targetFps
-    lastFrameTime = time.time()
+    fpsCounterStart = time.time()
+    frameCount = 0
 
     while cap.isOpened():
         currentTime = time.time()
-        timeSinceLast = currentTime - lastFrameTime
-        if timeSinceLast < frameTime:
-            time.sleep(0.001)
-            continue
-        lastFrameTime = currentTime
 
         success, image = cap.read()
         if not success:
@@ -188,11 +182,22 @@ def main():
             cv2.circle(outputImage, smoothedPos, penThickness // 2 + 5, (255, 255, 255), 1)
             cv2.circle(outputImage, smoothedPos, 2, drawColor, -1)
 
+        frameCount += 1
+        elapsedTime = time.time() - fpsCounterStart
+        if elapsedTime > 1:
+            fps = frameCount / elapsedTime
+            fpsCounterStart = time.time()
+            frameCount = 0
+        else:
+            fps = frameCount / elapsedTime
+
         modeText = f"Mode: {drawingMode.upper()} (1: Draw, 2: Line, 3: Rect)"
         controlsText = "'+/-': Thickness | r,g,b: Color | c: Clear | u: Undo"
+        fpsText = f"FPS: {fps:.2f}"
 
         cv2.putText(outputImage, modeText, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
         cv2.putText(outputImage, controlsText, (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+        cv2.putText(outputImage, fpsText, (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
 
         cv2.imshow('AirScribe', outputImage)
 

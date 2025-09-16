@@ -10,7 +10,6 @@ AirScribe is an innovative application that transforms your webcam into a virtua
 - **Customizable Tools**: Adjust pen thickness and color on the fly.
 - **Undo and Clear**: Easily undo the last shape or clear the entire canvas.
 - **Save Your Work**: Save your creations as PNG files with a single key press.
-- **High Performance**: Supports 720p resolution at 120 FPS for a smooth drawing experience.
 
 ## Installation
 
